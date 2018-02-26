@@ -23,24 +23,25 @@ MAINTAINER Makoto Yui <myui@apache.org>
 ENV VERSION=0.5.0
 ENV RC_NUMBER=3
 
+ENV JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+ENV JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV MAVEN_OPTS=-XX:MaxPermSize=256m
+
 WORKDIR /work
 
 RUN set -eux && \
     apt-get -y update && apt-get install -y software-properties-common python-software-properties && \
     add-apt-repository -y ppa:openjdk-r/ppa && \
     rm -rf /var/lib/apt/lists/* && \
-    apt-get -y update && apt-get install -y git coreutils wget gpgv2 maven zip openjdk-7-jdk openjdk-8-jdk && \
-    export GPG_TTY=$(tty) && \
-    export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 && \
-    export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64 && \
-    export MAVEN_OPTS=-XX:MaxPermSize=256m && \
+    apt-get -y update && apt-get install -y openssl coreutils wget maven zip openjdk-7-jdk openjdk-8-jdk && \
+    apt-get -y upgrade && \
     wget https://raw.githubusercontent.com/apache/incubator-hivemall/master/KEYS && \
     gpg --import KEYS && \
     wget https://raw.githubusercontent.com/myui/hivemall-dockerfiles/master/bin/build_from_src.sh && \
     chmod +x build_from_src.sh && ./build_from_src.sh && \
     rm -rf /work/${VERSION}-incubating-rc${RC_NUMBER} && \
     apt-get clean && \
-    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /root/.m2/* /tmp/*
 
 VOLUME ["/tmp", "/mnt/host/tmp"]
 
