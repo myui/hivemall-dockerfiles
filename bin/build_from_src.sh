@@ -64,7 +64,7 @@ else
 fi
 
 if [ -z "$RC_NUMBER" ]; then
-  echo "Please input a RC number (e.g., rc3)"
+  echo "Please input a RC number (e.g., 3)"
   echo -n ">>"
   read RC_NUMBER
   echo

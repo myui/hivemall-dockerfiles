@@ -17,31 +17,30 @@
 # under the License.
 #
 
-FROM ubuntu:xenial
+FROM openjdk:7-alpine
 MAINTAINER Makoto Yui <myui@apache.org>
 
 ENV VERSION=0.5.0
 ENV RC_NUMBER=3
 
-ENV JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-ENV JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-1.7-openjdk
+ENV JAVA8_HOME=/usr/lib/jvm/java-1.8-openjdk
 ENV MAVEN_OPTS=-XX:MaxPermSize=256m
 
 WORKDIR /work
 
 RUN set -eux && \
-    apt-get -y update && apt-get install -y software-properties-common python-software-properties && \
-    add-apt-repository -y ppa:openjdk-r/ppa && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get -y update && apt-get install -y openssl coreutils wget maven zip openjdk-7-jdk openjdk-8-jdk && \
-    apt-get -y upgrade && \
+    apk update && apk add --no-cache ca-certificates && update-ca-certificates && \
+    apk add --no-cache openjdk8 bash gnupg coreutils wget maven zip && \
+    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.27-r0/glibc-2.27-r0.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.27-r0/glibc-bin-2.27-r0.apk && \
+    apk add --no-cache glibc-2.27-r0.apk glibc-bin-2.27-r0.apk && \
     wget https://raw.githubusercontent.com/apache/incubator-hivemall/master/KEYS && \
     gpg --import KEYS && \
     wget https://raw.githubusercontent.com/myui/hivemall-dockerfiles/master/bin/build_from_src.sh && \
     chmod +x build_from_src.sh && ./build_from_src.sh && \
     rm -rf /work/${VERSION}-incubating-rc${RC_NUMBER} && \
-    apt-get clean && \
-    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /root/.m2/* /tmp/*
+    rm -rf rm -rf /var/cache/apk/* /root/.m2/* /tmp/* /work/*.apk
 
 VOLUME ["/tmp", "/mnt/host/tmp"]
 
