@@ -21,7 +21,7 @@ FROM ubuntu:xenial
 MAINTAINER Makoto Yui <myui@apache.org>
 
 ENV VERSION=0.5.0
-ENV RC_VERSION=3
+ENV RC_NUMBER=3
 
 WORKDIR /work
 
@@ -38,6 +38,7 @@ RUN set -eux && \
     gpg --import KEYS && \
     wget https://raw.githubusercontent.com/myui/hivemall-dockerfiles/master/bin/build_from_src.sh && \
     chmod +x build_from_src.sh && ./build_from_src.sh && \
+    rm -rf /work/${VERSION}-incubating-rc${RC_NUMBER} && \
     apt-get clean && \
     rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 

@@ -18,6 +18,16 @@
 # under the License.
 #
 
+usage() {
+    echo "./build_from_src.sh [--version <ARG> --rc <ARG>]"
+    echo
+    echo "Option:"
+    echo "  -h, --help                 | show usage"
+    echo "  -v, --version <ARG>        | set version"
+    echo "  -rc, --rc <ARG>            | set RC number"
+    echo
+}
+
 for opt in "$@"; do
   case "${opt}" in
     '-v'|'--version' )
