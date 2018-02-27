@@ -40,7 +40,7 @@ RUN set -eux && \
     wget https://raw.githubusercontent.com/myui/hivemall-dockerfiles/master/bin/build_from_src.sh && \
     chmod +x build_from_src.sh && ./build_from_src.sh && \
     rm -rf /work/${VERSION}-incubating-rc${RC_NUMBER} && \
-    rm -rf rm -rf /var/cache/apk/* /root/.m2/* /tmp/* /work/*.apk
+    rm -rf rm -rf /var/cache/apk/* /tmp/* /work/*.apk
 
 VOLUME ["/tmp", "/mnt/host/tmp"]
 
